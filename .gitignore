@@ -13,3 +13,7 @@ wheels/
 
 # Virtual environments
 .venv
+
+# db
+/alembic
+alembic.ini
