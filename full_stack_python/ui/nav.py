@@ -4,9 +4,7 @@ from .. import navigation
 
 
 def navbar_link(text: str, url: str) -> rx.Component:
-    return rx.link(
-        rx.text(text, size="4", weight="medium"), href=url
-    )
+    return rx.link(rx.text(text, size="4", weight="medium"), href=url)
 
 
 def navbar() -> rx.Component:
@@ -16,18 +14,16 @@ def navbar() -> rx.Component:
                 rx.hstack(
                     rx.link(
                         rx.image(
-                        src="/logo.jpg",
-                        width="2.25em",
-                        height="auto",
-                        border_radius="25%",
+                            src="/logo.jpg",
+                            width="2.25em",
+                            height="auto",
+                            border_radius="25%",
                         ),
-                        href=navigation.routes.HOME_ROUTE
+                        href=navigation.routes.HOME_ROUTE,
                     ),
                     rx.link(
-                        rx.heading(
-                            "Reflex", size="7", weight="bold"
-                        ),
-                        href=navigation.routes.HOME_ROUTE
+                        rx.heading("Reflex", size="7", weight="bold"),
+                        href=navigation.routes.HOME_ROUTE,
                     ),
                     align_items="center",
                 ),
@@ -61,24 +57,20 @@ def navbar() -> rx.Component:
                         height="auto",
                         border_radius="25%",
                     ),
-                    rx.heading(
-                        "Reflex", size="6", weight="bold"
-                    ),
+                    rx.heading("Reflex", size="6", weight="bold"),
                     align_items="center",
                 ),
                 rx.menu.root(
-                    rx.menu.trigger(
-                        rx.icon("menu", size=30)
-                    ),
+                    rx.menu.trigger(rx.icon("menu", size=30)),
                     rx.menu.content(
-                        rx.menu.item("Home",
-                            on_click=navigation.NavState.to_home),
-                        rx.menu.item("About",
-                            on_click=navigation.NavState.to_about_us),
-                        rx.menu.item("Pricing",
-                            on_click=navigation.NavState.to_pricing),
-                        rx.menu.item("Contact",
-                            on_click=navigation.NavState.to_contact),
+                        rx.menu.item("Home", on_click=navigation.NavState.to_home),
+                        rx.menu.item("About", on_click=navigation.NavState.to_about_us),
+                        rx.menu.item(
+                            "Pricing", on_click=navigation.NavState.to_pricing
+                        ),
+                        rx.menu.item(
+                            "Contact", on_click=navigation.NavState.to_contact
+                        ),
                         rx.menu.separator(),
                         rx.menu.item("Log in"),
                         rx.menu.item("Sign up"),

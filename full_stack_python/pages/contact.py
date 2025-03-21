@@ -12,17 +12,16 @@ from ..ui.base import base_page
 def get_utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
+
 class ContactEntryModel(rx.Model, table=True):
     first_name: str
     last_name: str | None = None
     email: str = Field(nullable=True)
     message: str
     created_at: datetime = Field(
-        default_factory= get_utc_now,
+        default_factory=get_utc_now,
         sa_type=sqlalchemy.DateTime(timezone=True),
-        sa_column_kwargs={
-            'server_default': sqlalchemy.func.now()
-        },
+        sa_column_kwargs={"server_default": sqlalchemy.func.now()},
         nullable=False,
     )
 
@@ -31,31 +30,29 @@ class ContactState(rx.State):
     form_data: dict = {}
     did_submit: bool = False
     timeleft: int = 5
-    
+
     @rx.var
     def timeleft_label(self) -> str:
         if self.timeleft < 1:
             return "No time left"
         return f"{self.timeleft} seconds"
-    
+
     @rx.var
     def thank_you(self) -> str:
         first_name = self.form_data.get("first_name") or ""
         return f"Thank You {first_name}".strip() + "!"
-    
+
     async def handle_submit(self, form_data: dict):
         """Handle the form submit."""
         print(form_data)
         self.form_data = form_data
         data = {}
-        for k,v in form_data.items():
+        for k, v in form_data.items():
             if v == "" or v is None:
                 continue
             data[k] = v
         with rx.session() as session:
-            db_entry = ContactEntryModel(
-                **data
-            )
+            db_entry = ContactEntryModel(**data)
             session.add(db_entry)
             session.commit()
             self.did_submit = True
@@ -69,7 +66,7 @@ class ContactState(rx.State):
     #         await asyncio.sleep(1)
     #         self.timeleft -= 1
     #         yield
-    
+
 
 @rx.page(
     # on_load=ContactState.start_timer,
@@ -92,7 +89,7 @@ def contact_page() -> rx.Component:
                     type="text",
                     width="100%",
                 ),
-                width="100%"
+                width="100%",
             ),
             rx.input(
                 name="email",
@@ -113,31 +110,15 @@ def contact_page() -> rx.Component:
         reset_on_submit=True,
     )
     my_child = rx.vstack(
-            rx.heading("Contact Us", size="9"),
-            # rx.text(ContactState.timeleft_label),
-            rx.cond(
-                ContactState.did_submit,
-                ContactState.thank_you,
-                ""
-            ),
-            rx.desktop_only(
-                rx.box(
-                    my_form,
-                    id="my-form-box",
-                    width="35vw"
-                )
-            ),
-            rx.mobile_and_tablet(
-                rx.box(
-                    my_form,
-                    id="my-form-box",
-                    width="65vw"
-                )
-            ),
-            spacing="5",
-            justify="center",
-            align="center",
-            min_height="85vh",
-            id="my-child"
+        rx.heading("Contact Us", size="9"),
+        # rx.text(ContactState.timeleft_label),
+        rx.cond(ContactState.did_submit, ContactState.thank_you, ""),
+        rx.desktop_only(rx.box(my_form, id="my-form-box", width="35vw")),
+        rx.mobile_and_tablet(rx.box(my_form, id="my-form-box", width="65vw")),
+        spacing="5",
+        justify="center",
+        align="center",
+        min_height="85vh",
+        id="my-child",
     )
     return base_page(my_child, hide_navbar=False)
