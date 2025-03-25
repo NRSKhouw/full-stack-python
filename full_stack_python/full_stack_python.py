@@ -5,7 +5,7 @@ import reflex as rx
 from rxconfig import config
 from .ui.base import base_page
 
-from . import pages, navigation
+from . import pages, navigation, contact
 
 
 class State(rx.State):
@@ -45,3 +45,9 @@ app = rx.App()
 app.add_page(index)
 app.add_page(pages.about_page, route=navigation.routes.ABOUT_US_ROUTE)
 app.add_page(pages.pricing_page, route=navigation.routes.PRICING_ROUTE)
+app.add_page(contact.contact_page, route=navigation.routes.CONTACT_US_ROUTE)
+app.add_page(
+    contact.contact_entries_list_page,
+    route=navigation.routes.CONTACT_ENTRIES_ROUTE,
+    on_load=contact.ContactState.list_entries,
+)
