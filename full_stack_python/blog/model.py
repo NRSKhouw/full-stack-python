@@ -26,6 +26,5 @@ class BlogPostModel(rx.Model, table=True):
         },
         nullable=False,
     )
-    # updated_at
     # publish_date
     # publish_time
